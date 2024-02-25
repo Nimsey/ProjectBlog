@@ -1,21 +1,23 @@
-import React from 'react'
-import styles from './navbar.module.css'
-import Link from 'next/link'
-import AuthLinks from '../authLinks/authLinks'
-import ThemeToggle from '../themeToggle/ThemeToggle'
+import React from "react";
+import styles from "./navbar.module.css";
+import Image from "next/image";
+import Link from "next/link";
+import AuthLinks from "../authLinks/authLinks";
+import ThemeToggle from "../themeToggle/ThemeToggle";
 
-const NavBar = () => {
+const Navbar = () => {
     return (
         <div className={styles.container}>
-            <div className={styles.logo}>Text Logo</div>
+            <div className={styles.logo}>Something Blog</div>
             <div className={styles.links}>
                 <ThemeToggle />
-                <Link href="/">Home</Link>
-                <Link href="/">Contact</Link>
+                <Link href="/" className={styles.link}>Homepage</Link>
+                <Link href="/" className={styles.link}>Contact</Link>
+                <Link href="/" className={styles.link}>About</Link>
                 <AuthLinks />
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default NavBar
+export default Navbar;

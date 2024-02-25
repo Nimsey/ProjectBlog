@@ -5,15 +5,8 @@
     height: 100px;
 }
 
-.social {
-    display: flex;
-    gap: 10px;
-    flex: 1;
-}
-
 .logo {
     flex: 1;
-    text-align: center;
     font-size: 36px;
     font-weight: bold;
 }
@@ -38,9 +31,7 @@
 }
 
 @media screen and (max-width: 1024px) {
-    .social {
-        display: none;
-    }
+
 
     .logo {
         text-align: left;
@@ -58,7 +49,7 @@
         justify-content: flex-end;
     }
 
-    .links {
+    .link {
         display: none;
     }
 }
