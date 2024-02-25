@@ -21,20 +21,18 @@ router.get('/', async (req, res) => {
 });
 
 //GET a single user by id
-async function getUser(req, res, next) {
-    let user;
-    try {
-        user = await User.findById(req.params.id);
-        if (user == null) {
-            return res.status(404).json({ message: 'Cannot find user' });
-        }
-    } catch (err) {
-        return res.status(500).json({ message: err.message });
-    }
-
-    res.user = user;
-    next();
-}
+router.get('/:id', (req, res) => { /* what goes inside function */
+    const userId = req.params.id;
+    console.log(userId);
+    User.findById(userId)
+        .select('-password') // Exclude password
+        .then(user => {
+            res.json({ '--- find user ---\n': user });
+        })
+        .catch(error => {
+            console.log('--- read user... error ---\n', error);
+        });
+});
 
 //CREATE a new user
 router.post('/new', async (req, res) => {
@@ -54,7 +52,7 @@ router.post('/new', async (req, res) => {
 });
 
 //UPDATE a user by id
-router.patch('/:id', getUser, async (req, res) => {
+router.patch('/:id', async (req, res) => {
     if (req.body.userName != null) {
         res.user.userName = req.body.userName;
     }
@@ -79,7 +77,7 @@ router.patch('/:id', getUser, async (req, res) => {
 });
 
 //DELETE a user by id
-router.delete('/:id', getUser, async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         await res.user.remove();
         res.json({ message: 'User has been deleted' });
