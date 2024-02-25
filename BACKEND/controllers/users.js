@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 //import the user model
-const { User } = require('../models/user');
+const User = require('../models/user');
 
 //creating routes that allow us to --
 // 1. return all users
@@ -21,12 +21,23 @@ router.get('/', async (req, res) => {
 });
 
 //GET a single user by id
-router.get('/:id', getUser, (req, res) => {
-    res.json(res.user);
-});
+async function getUser(req, res, next) {
+    let user;
+    try {
+        user = await User.findById(req.params.id);
+        if (user == null) {
+            return res.status(404).json({ message: 'Cannot find user' });
+        }
+    } catch (err) {
+        return res.status(500).json({ message: err.message });
+    }
+
+    res.user = user;
+    next();
+}
 
 //CREATE a new user
-router.post('/', async (req, res) => {
+router.post('/new', async (req, res) => {
     const user = new User({
         userName: req.body.userName,
         email: req.body.email,
