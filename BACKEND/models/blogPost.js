@@ -4,7 +4,15 @@ const mongoose = require('mongoose');
 const blogPostSchema = new mongoose.Schema({
     title: String,
     content: String,
-    image: String
+    image: String,
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment'
+    }]
 }, { timestamps: true });
 
 //create the model
