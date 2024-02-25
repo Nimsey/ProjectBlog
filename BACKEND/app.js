@@ -8,7 +8,7 @@ const app = express();
 const methodOverride = require('method-override');
 const buildPath = path.join(__dirname, '..', 'build');
 
-const PORT = process.env.PORT || 8000;
+
 
 //middleware
 app.use(express.urlencoded({ extended: true }));
@@ -16,12 +16,13 @@ app.use(express.json());
 app.use(cors());
 dotenv.config();
 app.use(express.static(buildPath));
-
+app.use(methodOverride('_method'));
 
 //routes
 
 
-//listening port
+//PORT
+const PORT = process.env.PORT || 8000;
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}`);
 });

@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
     userName: String,
     email: String,
-    password: String,
+    password: String, //will need to hash and excempt from the response
     firstName: String,
     lastName: String,
 }, { timestamps: true });
