@@ -34,6 +34,12 @@ router.get('/:id', (req, res) => { /* what goes inside function */
         });
 });
 
+//displaying users blog posts
+router.get('/:id/blogPosts', async (req, res) => {
+    const blogPosts = await BlogPost.find({ user: req.params.id });
+    res.json(blogPosts);
+});
+
 //CREATE a new user
 router.post('/new', async (req, res) => {
     const user = new User({

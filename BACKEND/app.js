@@ -28,8 +28,8 @@ const commentRoutes = require('./controllers/comments');
 
 //rout apps
 app.use('/users', userRoutes);
-// app.use('/blogPosts', blogPostRoutes);
-// app.use('/comments', commentRoutes);
+app.use('/blogPosts', blogPostRoutes);
+app.use('/comments', commentRoutes);
 
 
 //routes
