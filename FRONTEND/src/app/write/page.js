@@ -2,15 +2,17 @@
 import React from 'react'
 import styles from './write.module.css'
 import Image from 'next/image'
-import ReactQuill from 'react-quill'
+// import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { useState } from 'react'
 import dynamic from 'next/dynamic';
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
-// const QuillNoSSRWrapper = dynamic(import('react-quill'), {
-//     ssr: false,
-//     loading: () => <p>Loading ...</p>,
-// })
+const ReactQuill = dynamic(() => import('react-quill'), {
+    ssr: false,
+    loading: () => <p>Loading editor...</p>,
+});
 
 const modules = {
     toolbar: [
@@ -54,22 +56,39 @@ const formats = [
 
 
 const WritePage = () => {
+
     const [open, setOpen] = React.useState(false)
     const [value, setValue] = useState("");
+
+    const { status } = useSession();
+    const router = useRouter();
+
     return (
         <div className={styles.container}>
-            <h1>Title</h1>
-            <ReactQuill
-                modules={modules}
-                formats={formats}
-                theme="snow"
-                value={value}
-                onChange={setValue}
-                placeholder="Tell your story..." />
-
+            <h1>Create a Post</h1>
+            
+            {typeof window !== 'undefined' && (
+                <ReactQuill
+                    modules={modules}
+                    formats={formats}
+                    theme="snow"
+                    value={value}
+                    onChange={setValue}
+                    placeholder="Tell your story..." />
+            )}
             <button className={styles.publish}>
                 Publish
             </button>
+            <select className={styles.select}>
+            {/* onChange={(e) => setCatSlug(e.target.value)} */}
+                <option >Select Category</option>
+                <option value="style">style</option>
+                <option value="fashion">fashion</option>
+                <option value="food">food</option>
+                <option value="culture">culture</option>
+                <option value="travel">travel</option>
+                <option value="coding">coding</option>
+            </select>
         </div>
 
     )

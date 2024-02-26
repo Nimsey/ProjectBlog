@@ -22,27 +22,27 @@
     border-radius: 10px;
 }
 
-.category.style {
+.category.tips {
     background-color: #57c4ff31;
 }
 
-.category.fashion {
+.category.contests {
     background-color: #da85c731;
 }
 
-.category.food {
+.category.prompts {
     background-color: #7fb88133;
 }
 
-.category.travel {
+.category.meetUps {
     background-color: #ff795736;
 }
 
-.category.culture {
+.category.updates {
     background-color: #ffb04f45;
 }
 
-.category.coding {
+.category.reviews {
     background-color: #5e4fff31;
 }
 
