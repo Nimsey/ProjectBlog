@@ -5,6 +5,7 @@ import Image from 'next/image'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { useState } from 'react'
+import dynamic from 'next/dynamic';
 
 // const QuillNoSSRWrapper = dynamic(import('react-quill'), {
 //     ssr: false,
