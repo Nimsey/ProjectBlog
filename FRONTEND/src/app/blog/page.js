@@ -1,9 +1,20 @@
-import React from 'react'
+import CardList from "@/components/cardList/CardList";
+import styles from "./blogPage.module.css";
+import Menu from "@/components/menu/menu";
 
-const BlogPage = () => {
+const BlogPage = ({ searchParams }) => {
+//     const page = parseInt(searchParams.page) || 1;
+//     const { cat } = searchParams;
+
     return (
-        <div>Page</div>
-    )
-}
+        <div className={styles.container}>
+            <h1 className={styles.title}> Blog</h1>
+            <div className={styles.content}>
+                <CardList />
+                <Menu />
+            </div>
+        </div>
+    );
+};
 
-export default BlogPage
+export default BlogPage;
