@@ -56,7 +56,7 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
-
+// non auth/user models
 model Category {
   id    String  @id @default(cuid()) @map("_id")
   slug  String  @unique
