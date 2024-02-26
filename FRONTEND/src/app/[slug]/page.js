@@ -1,7 +1,7 @@
 import Menu from "@/components/menu/menu";
 import styles from "./singlePage.module.css";
 import Image from "next/image";
-// import Comments from "@/components/comments/Comments";
+import Comments from "@/components/comments/comments";
 
 // const getData = async (slug) => {
 //     const res = await fetch(`http://localhost:3000/api/posts/${slug}`, {
@@ -50,7 +50,7 @@ const SinglePage = async ({ params }) => {
                         // dangerouslySetInnerHTML={{ __html: data?.desc }}
                     /> Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus et qui consectetur maiores excepturi, delectus possimus quas perspiciatis nulla quibusdam eaque id eos aut quos, nisi repudiandae quia, sit veniam.
                     <div className={styles.comment}>
-                        {/* <Comments /> */}
+                        <Comments />
                     </div>
                 </div>
                 <Menu />
