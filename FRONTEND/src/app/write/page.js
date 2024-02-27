@@ -1,97 +1,148 @@
-'use client';
-import React from 'react'
-import styles from './write.module.css'
-import Image from 'next/image'
-// import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
-import { useState } from 'react'
-import dynamic from 'next/dynamic';
+"use client";
+
+import Image from "next/image";
+import styles from "./write.module.css";
+import { useEffect, useState } from "react";
+import "react-quill/dist/quill.bubble.css";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-
-const ReactQuill = dynamic(() => import('react-quill'), {
-    ssr: false,
-    loading: () => <p>Loading editor...</p>,
-});
-
-const modules = {
-    toolbar: [
-        [{ header: '1' }, { header: '2' }, { font: [] }],
-        [{ size: [] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [
-            { list: 'ordered' },
-            { list: 'bullet' },
-            { indent: '-1' },
-            { indent: '+1' },
-        ],
-        ['link', 'image', 'video'],
-        ['clean'],
-    ],
-    clipboard: {
-        // toggle to add extra line breaks when pasting HTML:
-        matchVisual: false,
-    },
-}
-/*
- * Quill editor formats
- * See https://quilljs.com/docs/formats/
- */
-const formats = [
-    'header',
-    'font',
-    'size',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'indent',
-    'link',
-    'image',
-    'video',
-]
-
+import {
+    getStorage,
+    ref,
+    uploadBytesResumable,
+    getDownloadURL,
+} from "firebase/storage";
+import app from "@/utils/firebase";
+import ReactQuill from "react-quill";
 
 const WritePage = () => {
-
-    const [open, setOpen] = React.useState(false)
-    const [value, setValue] = useState("");
-
     const { status } = useSession();
     const router = useRouter();
 
+    const [open, setOpen] = useState(false);
+    const [file, setFile] = useState(null);
+    const [media, setMedia] = useState("");
+    const [value, setValue] = useState("");
+    const [title, setTitle] = useState("");
+    const [catSlug, setCatSlug] = useState("");
+
+    useEffect(() => {
+        const storage = getStorage(app);
+        const upload = () => {
+            const name = new Date().getTime() + file.name;
+            const storageRef = ref(storage, name);
+
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            uploadTask.on(
+                "state_changed",
+                (snapshot) => {
+                    const progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log("Upload is " + progress + "% done");
+                    switch (snapshot.state) {
+                        case "paused":
+                            console.log("Upload is paused");
+                            break;
+                        case "running":
+                            console.log("Upload is running");
+                            break;
+                    }
+                },
+                (error) => { },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        setMedia(downloadURL);
+                    });
+                }
+            );
+        };
+
+        file && upload();
+    }, [file]);
+
+    if (status === "loading") {
+        return <div className={styles.loading}>Loading...</div>;
+    }
+
+    if (status === "unauthenticated") {
+        router.push("/");
+    }
+
+    const slugify = (str) =>
+        str
+            .toLowerCase()
+            .trim()
+            .replace(/[^\w\s-]/g, "")
+            .replace(/[\s_-]+/g, "-")
+            .replace(/^-+|-+$/g, "");
+
+    const handleSubmit = async () => {
+        const res = await fetch("/api/posts", {
+            method: "POST",
+            body: JSON.stringify({
+                title,
+                desc: value,
+                img: media,
+                slug: slugify(title),
+                catSlug: catSlug || "style", //If not selected, choose the general category
+            }),
+        });
+
+        if (res.status === 200) {
+            const data = await res.json();
+            router.push(`/posts/${data.slug}`);
+        }
+    };
+
     return (
         <div className={styles.container}>
-            <h1>Create a Post</h1>
-            
-            {typeof window !== 'undefined' && (
+            <input
+                type="text"
+                placeholder="Title"
+                className={styles.input}
+                onChange={(e) => setTitle(e.target.value)}
+            />
+            <select className={styles.select} onChange={(e) => setCatSlug(e.target.value)}>
+                <option value="tips">Writing Tips</option>
+                <option value="reviews">Book Reviews</option>
+                <option value="prompts">Writing Prompts</option>
+                <option value="updates">book updates</option>
+                <option value="meetUps">Meet Ups</option>
+                <option value="contests">Writing Contests</option>
+            </select>
+            <div className={styles.editor}>
+                <button className={styles.button} onClick={() => setOpen(!open)}>
+                    <Image src="/plus.png" alt="" width={16} height={16} />
+                </button>
+                {open && (
+                    <div className={styles.add}>
+                        <input
+                            type="file"
+                            id="image"
+                            onChange={(e) => setFile(e.target.files[0])}
+                            style={{ display: "none" }}
+                        />
+                        <button className={styles.addButton}>
+                            <label htmlFor="image">
+                                <Image src="/image.png" alt="" width={16} height={16} />
+                            </label>
+                        </button>
+                    </div>
+                )}
                 <ReactQuill
-                    modules={modules}
-                    formats={formats}
-                    theme="snow"
+                    className={styles.textArea}
+                    theme="bubble"
                     value={value}
                     onChange={setValue}
-                    placeholder="Tell your story..." />
-            )}
-            <button className={styles.publish}>
+                    placeholder="Tell your story..."
+                />
+            </div>
+            <button className={styles.publish} onClick={handleSubmit}>
                 Publish
             </button>
-            <select className={styles.select} onChange={(e) => setCatSlug(e.target.value)}>
-            
-                <option >Select Category</option>
-                <option value="tips">Writing Tips</option>
-                <option value="contests">2024 Contests</option>
-                <option value="meetUps">Meet Ups</option>
-                <option value="prompts">Writing Prompts</option>
-                <option value="updates">Book Updates</option>
-                <option value="reviews">Book Reviews</option>
-            </select>
         </div>
+    );
+};
 
-    )
-}
-
-export default WritePage
+export default WritePage;
