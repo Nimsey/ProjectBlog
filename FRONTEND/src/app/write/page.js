@@ -79,15 +79,15 @@ const WritePage = () => {
             <button className={styles.publish}>
                 Publish
             </button>
-            <select className={styles.select}>
-            {/* onChange={(e) => setCatSlug(e.target.value)} */}
+            <select className={styles.select} onChange={(e) => setCatSlug(e.target.value)}>
+            
                 <option >Select Category</option>
-                <option value="style">style</option>
-                <option value="fashion">fashion</option>
-                <option value="food">food</option>
-                <option value="culture">culture</option>
-                <option value="travel">travel</option>
-                <option value="coding">coding</option>
+                <option value="tips">Writing Tips</option>
+                <option value="contests">2024 Contests</option>
+                <option value="meetUps">Meet Ups</option>
+                <option value="prompts">Writing Prompts</option>
+                <option value="updates">Book Updates</option>
+                <option value="reviews">Book Reviews</option>
             </select>
         </div>
 

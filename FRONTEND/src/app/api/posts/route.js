@@ -18,13 +18,6 @@ export const GET = async (req) => {
         },
     };
 
-
-
-
-
-
-
-
     try {
         const [posts, count] = await prisma.$transaction([
             prisma.post.findMany(query),
@@ -39,7 +32,30 @@ export const GET = async (req) => {
     }
 };
 
+// DELETE A POST
+export const DELETE = async (req) => {
+    const session = await getAuthSession();
 
+    if (!session) {
+        return new NextResponse(
+            JSON.stringify({ message: "Not Authenticated!" }, { status: 401 })
+        );
+    }
+
+    try {
+        const body = await req.json();
+        const post = await prisma.post.delete({
+            where: { id: body.id },
+        });
+
+        return new NextResponse(JSON.stringify(post, { status: 200 }));
+    } catch (err) {
+        console.log(err);
+        return new NextResponse(
+            JSON.stringify({ message: "Something went wrong!" }, { status: 500 })
+        );
+    }
+};
 
 
 
