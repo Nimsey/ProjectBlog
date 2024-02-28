@@ -1,11 +1,26 @@
 "use client";
 import Link from "next/link";
 import styles from "./authLinks.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signOut, useSession } from "next-auth/react";
 
 const AuthLinks = () => {
     const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth > 640) {
+                setOpen(false);
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        // Clean up the event listener when the component unmounts
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     const { status } = useSession();
 
@@ -32,15 +47,12 @@ const AuthLinks = () => {
             </div>
             {open && (
                 <div className={styles.responsiveMenu}>
-                    <Link href="/">Homepage</Link>
-                    <Link href="/">About</Link>
-                    <Link href="/">Contact</Link>
-                    {status === "notauthenticated" ? (
+                    {status === "unauthenticated" ? (
                         <Link href="/login">Login</Link>
                     ) : (
                         <>
                             <Link href="/write">Write</Link>
-                            <span className={styles.link}>Logout</span>
+                            <span className={styles.Outlink} onClick={signOut}>Logout</span>
                         </>
                     )}
                 </div>
