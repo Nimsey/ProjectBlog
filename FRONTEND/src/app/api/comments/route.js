@@ -3,7 +3,6 @@ import prisma from "@/utils/connect";
 import { NextResponse } from "next/server";
 
 // GET ALL COMMENTS OF A POST
-// GET COMMENTS
 export const GET = async (req) => {
     const { searchParams } = new URL(req.url);
 
@@ -91,7 +90,7 @@ export const PUT = async (req) => {
     }
 };
 
-// DELETE A COMMENT
+
 // DELETE A COMMENT
 export const DELETE = async (req) => {
     const session = await getAuthSession();

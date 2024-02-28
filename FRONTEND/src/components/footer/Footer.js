@@ -9,13 +9,10 @@ const Footer = () => {
             <div className={styles.info}>
                 <div className={styles.logo}>
                     <Image src="/p1.jpeg" alt="lama blog" width={50} height={50} />
-                    <h1 className={styles.logoText}>Lamablog</h1>
+                    <h1 className={styles.logoText}>Inkwell Novelty: more than just a blog</h1>
                 </div>
                 <p className={styles.desc}>
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Enim
-                    necessitatibus similique aspernatur obcaecati veritatis. Aperiam cum
-                    porro sequi, totam minima consequuntur, aspernatur deleniti vero
-                    repellendus dorales.
+                
                 </p>
             </div>
             <div className={styles.links}>

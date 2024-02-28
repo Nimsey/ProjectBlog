@@ -8,12 +8,10 @@ import ThemeToggle from "../themeToggle/ThemeToggle";
 const Navbar = () => {
     return (
         <div className={styles.container}>
-            <div className={styles.logo}>Something Blog</div>
+            <Link href="/" className={styles.logo}>Inkwell Novelty</Link>
             <div className={styles.links}>
                 <ThemeToggle />
-                <Link href="/" className={styles.link}>Homepage</Link>
-                <Link href="/" className={styles.link}>Contact</Link>
-                <Link href="/" className={styles.link}>About</Link>
+                {/* <Link href="/" className={styles.link}>Home</Link> */}
                 <AuthLinks />
             </div>
         </div>
