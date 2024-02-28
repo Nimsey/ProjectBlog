@@ -21,7 +21,12 @@ const fetcher = async (url) => {
 };
 
 const Comments = ({ postSlug }) => {
-    const { status } = useSession();
+    const { data: session, status } = useSession();
+    
+    const [isEditing, setIsEditing] = useState(false);
+    const [editCommentId, setEditCommentId] = useState(null);
+    const [editDesc, setEditDesc] = useState('');
+
 
     const { data, mutate, isLoading } = useSWR(
         `http://localhost:3000/api/comments?postSlug=${postSlug}`,
@@ -36,6 +41,52 @@ const Comments = ({ postSlug }) => {
             body: JSON.stringify({ desc, postSlug }),
         });
         mutate();
+    };
+
+    const handleDelete = async (commentId) => {
+        try {
+            console.log('Attempting to delete comment with ID:', commentId); // Log the ID being used for deletion
+
+            const response = await fetch(`/api/comments`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: commentId }), // Ensure this matches what your server expects
+            });
+
+            console.log('Delete request body:', JSON.stringify({ id: commentId })); // Log the body being sent
+
+            if (!response.ok) {
+                throw new Error(`Response is not OK`);
+            }
+
+            // After a successful delete, re-fetch the comments
+            mutate(); // This will re-fetch the comments based on the key provided to useSWR
+
+        } catch (error) {
+            console.error('Failed to delete comment:', error);
+        }
+    };
+
+
+
+    const handleEdit = (id, desc) => {
+        setEditCommentId(id);
+        setEditDesc(desc);
+        setIsEditing(true);
+    };
+
+    const handleSubmitEdit = async () => {
+        await fetch("/api/comments", {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id: editCommentId, desc: editDesc }),
+        });
+        mutate(); // Re-fetch comments to reflect the update
+        setIsEditing(false); // Close the edit dialog
     };
 
     return (
@@ -76,7 +127,25 @@ const Comments = ({ postSlug }) => {
                                 </div>
                             </div>
                             <p className={styles.desc}>{item.desc}</p>
+                            {status === "authenticated" && session.user.email === item.userEmail && (
+                                <>
+                                    <button onClick={() => handleDelete(item.id)}>Delete</button>
+                                    <button onClick={() => handleEdit(item.id, item.desc)}>Edit</button>
+                                </>
+                            )}
+                            {isEditing && (
+                                <div className={styles.editModal}> {/* You need to style this */}
+                                    <textarea
+                                        value={editDesc}
+                                        onChange={(e) => setEditDesc(e.target.value)}
+                                        className={styles.editInput} // Style as needed
+                                    />
+                                    <button onClick={handleSubmitEdit}>Submit</button>
+                                    <button onClick={() => setIsEditing(false)}>Cancel</button>
+                                </div>
+                            )}
                         </div>
+
                     ))}
             </div>
         </div>

@@ -3,43 +3,34 @@ import prisma from "@/utils/connect";
 import { NextResponse } from "next/server";
 
 // GET ALL COMMENTS OF A POST
-export const getAllComments = async (req) => {
+// GET COMMENTS
+export const GET = async (req) => {
     const { searchParams } = new URL(req.url);
 
     const postSlug = searchParams.get("postSlug");
-
-    try {
-        const comments = await prisma.comment.findMany({
-            where: {
-                ...(postSlug && { postSlug }),
-            },
-            include: { user: true },
-        });
-
-        return new NextResponse(JSON.stringify(comments, { status: 200 }));
-    } catch (err) {
-        // console.log(err);
-        return new NextResponse(
-            JSON.stringify({ message: "Something went wrong!" }, { status: 500 })
-        );
-    }
-};
-
-// get singel comment by id
-export const getoneCommentById = async (req) => {
-    const { searchParams } = new URL(req.url);
-
     const id = searchParams.get("id");
 
     try {
-        const comment = await prisma.comment.findUnique({
-            where: {
-                id: id,
-            },
-            include: { user: true },
-        });
+        if (postSlug) {
+            const comments = await prisma.comment.findMany({
+                where: {
+                    ...(postSlug && { postSlug }),
+                },
+                include: { user: true },
+            });
 
-        return new NextResponse(JSON.stringify(comment, { status: 200 }));
+            return new NextResponse(JSON.stringify(comments, { status: 200 }));
+        } else if (id) {
+            const comment = await prisma.comment.findUnique({
+                where: { id: id },
+            });
+
+            return new NextResponse(JSON.stringify(comment, { status: 200 }));
+        } else {
+            return new NextResponse(
+                JSON.stringify({ message: "Invalid parameters!" }, { status: 400 })
+            );
+        }
     } catch (err) {
         // console.log(err);
         return new NextResponse(
@@ -47,6 +38,7 @@ export const getoneCommentById = async (req) => {
         );
     }
 };
+
 
 // CREATE A COMMENT
 export const POST = async (req) => {
@@ -87,7 +79,7 @@ export const PUT = async (req) => {
         const body = await req.json();
         const comment = await prisma.comment.update({
             where: { id: body.id },
-            data: { content: body.content },
+            data: { desc: body.desc},
         });
 
         return new NextResponse(JSON.stringify(comment, { status: 200 }));
@@ -99,6 +91,7 @@ export const PUT = async (req) => {
     }
 };
 
+// DELETE A COMMENT
 // DELETE A COMMENT
 export const DELETE = async (req) => {
     const session = await getAuthSession();
@@ -114,16 +107,15 @@ export const DELETE = async (req) => {
         await prisma.comment.delete({
             where: { id: body.id },
         });
+        // Send a success response back
+        return new NextResponse(
+            JSON.stringify({ message: "Comment deleted successfully" }, { status: 200 })
+        );
     } catch (err) {
         console.log(err);
         return new NextResponse(
             JSON.stringify({ message: "Something went wrong!" }, { status: 500 })
         );
     }
-}
-
-
-export const GET = {
-    getAllComments,
-    getoneCommentById
 };
+
