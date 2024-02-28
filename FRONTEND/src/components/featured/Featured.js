@@ -10,15 +10,12 @@ const Featured = () => {
             </h1>
             <div className={styles.post}>
                 <div className={styles.imgContainer}>
-                    <Image src="/p1.jpeg" alt="" fill className={styles.image} />
+                    <Image src="/dragon.jpg" alt="" fill className={styles.image} />
                 </div>
                 <div className={styles.textContainer}>
-                    <h1 className={styles.postTitle}>Lorem ipsum dolor sit amet alim consectetur adipisicing elit.</h1>
+                    <h1 className={styles.postTitle}>Flash Fiction Fever: Enter Our 100-Word Story Contest</h1>
                     <p className={styles.postDesc}>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                        Cupiditate, quam nisi magni ea laborum inventore voluptatum
-                        laudantium repellat ducimus unde aspernatur fuga. Quo, accusantium
-                        quisquam! Harum unde sit culpa debitis.
+                    Flash fiction is a genre that demands brevity and depth, often leaving a lasting impact. This blog post announces our latest contest, challenging writers to tell a compelling story in just 100 words. Discover the rules, submission guidelines, and prizes for crafting a miniature masterpiece.
                     </p>
                     <button className={styles.button}>Read More</button>
                 </div>
