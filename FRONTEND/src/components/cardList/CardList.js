@@ -1,4 +1,5 @@
-import React from "react";
+'use client';
+import React, { useEffect, useState } from "react";
 import styles from "./cardList.module.css";
 import Pagination from "../pagination/pagination";
 import Image from "next/image";
@@ -19,8 +20,19 @@ const getData = async (page, cat) => {
     return res.json();
 };
 
-const CardList = async ({ page, cat }) => {
-    const { posts, count } = await getData(page, cat);
+const CardList = ({ page, cat }) => {
+    const [posts, setPosts] = useState([]);
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await getData(page, cat);
+            setPosts(data.posts);
+            setCount(data.count);
+        };
+
+        fetchData();
+    }, [page, cat]);
 
     const POST_PER_PAGE = 2;
 
@@ -31,8 +43,8 @@ const CardList = async ({ page, cat }) => {
         <div className={styles.container}>
             <h1 className={styles.title}>Recent Posts</h1>
             <div className={styles.posts}>
-                {posts?.map((item) => (
-                    <Card item={item} key={item._id} />
+                {posts?.map((item, index) => (
+                    <Card item={item} key={index} />
                 ))}
             </div>
             <Pagination page={page} hasPrev={hasPrev} hasNext={hasNext} />

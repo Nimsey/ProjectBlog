@@ -1,85 +1,37 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import styles from "./menuPosts.module.css"
+import styles from "./menuPosts.module.css";
+import { PrismaClient } from '@prisma/client';
 
-const MenuPosts = ({ withImage }) => {
+const Menuposts = ({ post = {}, withImage }) => {
     return (
+
+
         <div className={styles.items}>
-            <Link href="/" className={styles.item}>
-                {withImage && (
+
+            <Link key={post.id} href={`/posts/${post.slug}`} className={styles.item}>
+                {withImage && post.img && (
                     <div className={styles.imageContainer}>
-                        <Image src="/p1.jpeg" alt="" fill className={styles.image} />
+                        <Image src={post.img} alt="" className={styles.image} />
                     </div>
                 )}
                 <div className={styles.textContainer}>
-                    <span className={`${styles.category} ${styles.travel}`}>Travel</span>
-                    <h3 className={styles.postTitle}>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    </h3>
-                    <div className={styles.detail}>
-                        <span className={styles.username}>John Doe</span>
-                        <span className={styles.date}> - 10.03.2023</span>
-                    </div>
-                </div>
-            </Link>
-            <Link href="/" className={styles.item}>
-                {withImage && (
-                    <div className={styles.imageContainer}>
-                        <Image src="/p1.jpeg" alt="" fill className={styles.image} />
-                    </div>
-                )}
-                <div className={styles.textContainer}>
-                    <span className={`${styles.category} ${styles.culture}`}>
-                        Culture
+                    <span className={`${styles.category} ${styles[post.cat.slug]}`}>
+                        {post.cat && post.cat.title}
                     </span>
-                    <h3 className={styles.postTitle}>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    </h3>
+                    <h3 className={styles.postsTitle}>{post.title}</h3>
                     <div className={styles.detail}>
-                        <span className={styles.username}>John Doe</span>
-                        <span className={styles.date}> - 10.03.2023</span>
+                        <span className={styles.username}>{post.user && post.user.name}</span>
+                        <span className={styles.date}> - {new Date(post.createdAt).toLocaleDateString()}</span>
+                        <p>Views: {post.views}</p> {/* Accessing views here */}
                     </div>
                 </div>
             </Link>
-            <Link href="/" className={styles.item}>
-                {withImage && (
-                    <div className={styles.imageContainer}>
-                        <Image src="/p1.jpeg" alt="" fill className={styles.image} />
-                    </div>
-                )}
-                <div className={styles.textContainer}>
-                    <span className={`${styles.category} ${styles.food}`}>Food</span>
-                    <h3 className={styles.postTitle}>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    </h3>
-                    <div className={styles.detail}>
-                        <span className={styles.username}>John Doe</span>
-                        <span className={styles.date}> - 10.03.2023</span>
-                    </div>
-                </div>
-            </Link>
-            <Link href="/" className={styles.item}>
-                {withImage && (
-                    <div className={styles.imageContainer}>
-                        <Image src="/p1.jpeg" alt="" fill className={styles.image} />
-                    </div>
-                )}
-                <div className={styles.textContainer}>
-                    <span className={`${styles.category} ${styles.fashion}`}>
-                        Fashion
-                    </span>
-                    <h3 className={styles.postTitle}>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    </h3>
-                    <div className={styles.detail}>
-                        <span className={styles.username}>John Doe</span>
-                        <span className={styles.date}> - 10.03.2023</span>
-                    </div>
-                </div>
-            </Link>
+
+
         </div>
     );
 };
 
-export default MenuPosts;
+export default Menuposts;

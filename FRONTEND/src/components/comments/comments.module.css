@@ -29,6 +29,20 @@
     cursor: pointer;
 }
 
+.CommentBtn{
+
+    padding: 6px 10px;
+    margin: 5px;
+    background-color: teal;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+
+}
+
 .comments {
     margin-top: 50px;
 }
@@ -67,4 +81,11 @@
 .desc {
     font-size: 18px;
     font-weight: 300;
+}
+
+.editModal{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 40%;
 }

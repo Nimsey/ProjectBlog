@@ -129,8 +129,8 @@ const Comments = ({ postSlug }) => {
                             <p className={styles.desc}>{item.desc}</p>
                             {status === "authenticated" && session.user.email === item.userEmail && (
                                 <>
-                                    <button onClick={() => handleDelete(item.id)}>Delete</button>
-                                    <button onClick={() => handleEdit(item.id, item.desc)}>Edit</button>
+                                    <button className={styles.CommentBtn} onClick={() => handleDelete(item.id)}>Delete</button>
+                                    <button className={styles.CommentBtn} onClick={() => handleEdit(item.id, item.desc)}>Edit</button>
                                 </>
                             )}
                             {isEditing && (
