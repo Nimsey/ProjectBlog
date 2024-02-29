@@ -1,5 +1,6 @@
 "use client";
 import dynamic from 'next/dynamic';
+
 import Image from "next/image";
 import styles from "./write.module.css";
 import { useEffect, useState } from "react";
@@ -13,7 +14,10 @@ import {
     getDownloadURL,
 } from "firebase/storage";
 import app from "@/utils/firebase";
-import ReactQuill from "react-quill";
+const ReactQuill = dynamic(() => import('react-quill'), {
+    ssr: false,
+    loading: () => <p>Loading...</p>,
+});
 
 const WritePage = () => {
     const { status } = useSession();
