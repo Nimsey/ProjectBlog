@@ -1,5 +1,5 @@
 "use client";
-
+import dynamic from 'next/dynamic';
 import Image from "next/image";
 import styles from "./write.module.css";
 import { useEffect, useState } from "react";
