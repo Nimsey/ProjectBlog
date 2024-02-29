@@ -44,7 +44,7 @@ export const PUT = async (req) => {
     try {
         const body = await req.json();
         const post = await prisma.post.update({
-            where: { id: body.id },
+            where: { slug: body.slug },
             data: { ...body },
         });
 

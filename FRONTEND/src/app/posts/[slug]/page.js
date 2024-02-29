@@ -52,7 +52,7 @@ const SinglePage = async ({ params }) => {
                         dangerouslySetInnerHTML={{ __html: desc }}
                     />
                     <div className={styles.comment}>
-                        <Link href={`/posts/edit/${slug}`}>
+                        <Link href={`/posts/${slug}/edit?title=${title}&user=${user.name}&createdAt=${createdAt}&img=${img}&desc=${desc}`}>
                             Edit
                         </Link>
                         {/* FRONTEND/src/app/api/posts/edit/[slug].js */}
